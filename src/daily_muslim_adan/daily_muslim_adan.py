@@ -5,6 +5,7 @@ import time
 import playsound
 from prayertimehandler import PrayerTimeHandler, today_prayer_times
 
+
 TIME_FORMAT = "%H:%M"
 WAKEUP_TIME_BEFORE_SUNRISE = "00:30"
 REGEX_MATCH = "0:00:00"
