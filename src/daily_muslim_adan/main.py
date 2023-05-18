@@ -3,7 +3,8 @@ from datetime import datetime
 import re
 import time
 import playsound
-from prayertimehandler import PrayerTimeHandler, today_prayer_times
+from prayertimehandler import PrayerTimeHandler
+from audiofilehandler import play_audio
 
 
 TIME_FORMAT = "%H:%M"
@@ -16,11 +17,7 @@ def get_current_time():
   current_time = now.strftime(TIME_FORMAT)
   return current_time
 
-def replace_sunrise_with_wakeup_time(prayer_times_list, WAKEUP_TIME_BEFORE_SUNRISE):
-  wakeup_time = datetime.strptime(prayer_times_list[0], TIME_FORMAT) - datetime.strptime(WAKEUP_TIME_BEFORE_SUNRISE, TIME_FORMAT)
-  wakeup_time = str(wakeup_time)[:-3]
-  prayer_times_list[0] = wakeup_time
-  return prayer_times_list
+
 
 def get_prayer_times(city_name):
   url = f"https://dailyprayer.abdulrcs.repl.co/api/{city_name}"
@@ -55,15 +52,16 @@ def main():
     current_datetime = datetime.today()
     prayer_time_obj = PrayerTimeHandler(city, country, current_datetime.year)
     prayer_time_dict = prayer_time_obj.get_annual_prayer_times()
-    prayer_times_list = today_prayer_times(prayer_time_dict, current_datetime)
+    prayer_times_list = prayer_time_obj.today_prayer_times(prayer_time_dict, current_datetime)
     # prayer_times_list = get_prayer_times("ingolstadt")
     current_time = get_current_time()
-    prayer_times_list = replace_sunrise_with_wakeup_time(prayer_times_list, WAKEUP_TIME_BEFORE_SUNRISE)
+    prayer_times_list = prayer_time_obj.replace_sunrise_with_wakeup_time(prayer_times_list, WAKEUP_TIME_BEFORE_SUNRISE)
     prayer_time_diff = get_prayer_time_diff(prayer_times_list, current_time)
     print(f'_________________Current datetime : {current_datetime}_________________')
     for pr_time in prayer_time_diff:
       if re.match(REGEX_MATCH, pr_time):
         print("_______prayer_________")
+        play_audio("")
         playsound.playsound("adan.mp3")
         time.sleep(120)
       else:
