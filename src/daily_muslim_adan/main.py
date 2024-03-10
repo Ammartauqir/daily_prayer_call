@@ -2,11 +2,10 @@ import requests
 from datetime import datetime
 import re
 import time
-import playsound
+import logging
 from handlers.prayertimehandler import \
     PrayerTimeHandler, \
     get_current_time, \
-    get_prayer_times, \
     get_prayer_time_diff
 from handlers.audiofilehandler import play_audio
 
@@ -14,11 +13,15 @@ WAKEUP_TIME_BEFORE_SUNRISE = "00:30"
 REGEX_MATCH = "0:00:00"
 
 
+def init_logging():
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO,
+                        datefmt="%H:%M:%S")
+
 def main():
     city  = "Ingolstadt"
     country = "Germany"
-    play_audio("adan.mp3")
-    print("xxxxxxxxxxxxx")
+    # play_audio("adan.mp3")
     current_year = datetime.today().year
     prayer_time_obj = PrayerTimeHandler(city, country, current_year)
     while True:
@@ -35,7 +38,7 @@ def main():
                 play_audio("adan.mp3")
             else:
                 print(pr_time)
-        time.sleep(28)
+        time.sleep(59)
 
 
 if __name__ == "__main__":
