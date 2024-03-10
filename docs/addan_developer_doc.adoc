@@ -38,3 +38,21 @@ DiagramBlock <|-- PlantUmlBlock
      |          Lots of work             |
      +-----------------------------------+
 ....
+
+[plantuml, format="png"]
+----
+@startuml
+start
+:Input City and Country;
+:Get current Date;
+if (Prayer Datetime JSON exists) then (no)
+     :Download prayer datetimes;
+else (yes)
+endif
+while(Always)
+    :Get current datetime;
+    :;
+endwhile
+stop
+@enduml
+----
