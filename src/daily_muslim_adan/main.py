@@ -8,7 +8,6 @@ from handlers.prayertimehandler import \
     get_current_time, \
     get_prayer_time_diff
 from handlers.audiofilehandler import play_audio
-from icecream import ic
 
 WAKEUP_TIME_BEFORE_SUNRISE = "00:30"
 REGEX_MATCH = "0:00:00"
