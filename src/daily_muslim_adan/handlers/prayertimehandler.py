@@ -53,8 +53,7 @@ class PrayerTimeHandler:
 
 
 def get_current_time():
-    now = datetime.now()
-    current_time = now.strftime(TIME_FORMAT)
+    current_time = datetime.now().strftime(TIME_FORMAT)
     return current_time
 
 

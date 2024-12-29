@@ -8,6 +8,7 @@ from handlers.prayertimehandler import \
     get_current_time, \
     get_prayer_time_diff
 from handlers.audiofilehandler import play_audio
+from icecream import ic
 
 WAKEUP_TIME_BEFORE_SUNRISE = "00:30"
 REGEX_MATCH = "0:00:00"
@@ -18,8 +19,9 @@ def init_logging():
     logging.basicConfig(format=format, level=logging.INFO,
                         datefmt="%H:%M:%S")
 
+
 def main():
-    city  = "Ingolstadt"
+    city = "Ingolstadt"
     country = "Germany"
     # play_audio("adan.mp3")
     current_year = datetime.today().year
@@ -32,10 +34,11 @@ def main():
         #                                                                      WAKEUP_TIME_BEFORE_SUNRISE)
         prayer_time_diff = get_prayer_time_diff(prayer_times_list, current_time)
         print(f'_________________Current datetime : {current_datetime}_________________')
+
         for pr_time in prayer_time_diff:
             if re.match(REGEX_MATCH, pr_time):
                 print("_______prayer_________")
-                play_audio("adan.mp3")
+                play_audio("adan2.mp3")
             else:
                 print(pr_time)
         time.sleep(59)
