@@ -5,7 +5,7 @@ import os
 from os.path import exists
 
 PRAYER_NAMES = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']  # skipping 'Fajr' as adan only rings 30min before sunrise
-PRAYER_FILE_PATH = "data\prayertime_files"
+PRAYER_FILE_PATH = "data/prayertime_files"
 TIME_FORMAT = "%H:%M"
 
 
