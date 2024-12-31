@@ -3,11 +3,11 @@ from datetime import datetime
 import re
 import time
 import logging
-from handlers.prayertimehandler import \
+from daily_muslim_adan.handlers.prayertimehandler import \
     PrayerTimeHandler, \
     get_current_time, \
     get_prayer_time_diff
-from handlers.audiofilehandler import play_audio
+from daily_muslim_adan.handlers.audiofilehandler import play_audio
 
 WAKEUP_TIME_BEFORE_SUNRISE = "00:30"
 REGEX_MATCH = "0:00:00"
