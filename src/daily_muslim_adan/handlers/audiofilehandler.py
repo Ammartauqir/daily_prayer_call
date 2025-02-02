@@ -1,11 +1,19 @@
-import playsound
-import time
 import pygame
+import time
 
+# Initialize the mixer
+pygame.mixer.init()
 
-def play_audio(audio_file):
-    pygame.mixer.init()
-    pygame.mixer.music.load(audio_file)
-    pygame.mixer.music.play()
-    while pygame.mixer.music.get_busy():  # Wait until the music stops
-        time.sleep(1)
+# Load and play the audio file
+pygame.mixer.music.load("../adan2.mp3")
+pygame.mixer.music.play()
+
+# Perform other tasks while the audio plays
+for i in range(5):
+    print(f"Task {i+1}: Doing something else...")
+    time.sleep(1)
+
+# Wait until the audio finishes before exiting
+while pygame.mixer.music.get_busy():
+    print("now waiting")
+    time.sleep(0.1)
