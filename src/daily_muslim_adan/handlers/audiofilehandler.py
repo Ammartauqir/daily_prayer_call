@@ -1,19 +1,25 @@
-import pygame
-import time
+import threading
+from pydub import AudioSegment
+from pydub.playback import play
+import os
+from pydub.utils import which
+print(which("ffmpeg"))
 
-# Initialize the mixer
-pygame.mixer.init()
+def play_wav(file_path):
+    audio = AudioSegment.from_wav(file_path)
+    play(audio)
 
-# Load and play the audio file
-pygame.mixer.music.load("../adan2.mp3")
-pygame.mixer.music.play()
 
-# Perform other tasks while the audio plays
-for i in range(5):
-    print(f"Task {i+1}: Doing something else...")
-    time.sleep(1)
+def play_sound_in_thread(file_path):
+    thread = threading.Thread(target=play_wav, args=(file_path,), daemon=True)
+    thread.start()
 
-# Wait until the audio finishes before exiting
-while pygame.mixer.music.get_busy():
-    print("now waiting")
-    time.sleep(0.1)
+
+# Example usage
+wav_adan_filepath = os.path.abspath(os.path.join("data", "adan2.mp3"))
+print(wav_adan_filepath)
+sound = AudioSegment.from_mp3(wav_adan_filepath)
+sound.export("adhan.wav", format="wav")  # Convert to WAV
+# play(AudioSegment.from_wav("adhan.wav"))
+play_sound_in_thread("adhan.wav")
+

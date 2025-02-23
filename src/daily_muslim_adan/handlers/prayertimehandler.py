@@ -3,19 +3,44 @@ import json
 from datetime import datetime
 import os
 from os.path import exists
+from icecream import ic
 
-PRAYER_NAMES = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']  # skipping 'Fajr' as adan only rings 30min before sunrise
-PRAYER_FILE_PATH = "daily_muslim_adan/data/prayertime_files"
-TIME_FORMAT = "%H:%M"
+PRAYER_NAMES = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']  # skipping 'Fajr' as adan only rings 30min before sunrise
+PRAYER_FILE_PATH = os.path.abspath(os.path.join("data", "prayertime_files"))
+TIME_FORMAT = "%H:%M:%S"
 
 
-def replace_sunrise_with_wakeup_time(prayer_times_list, WAKEUP_TIME_BEFORE_SUNRISE):
-    wakeup_time = datetime.strptime(prayer_times_list[0], TIME_FORMAT) - datetime.strptime(
+def get_current_time():
+    current_time = datetime.now().strftime(TIME_FORMAT)
+    return current_time
+
+
+def replace_sunrise_with_wakeup_time(prayer_times, WAKEUP_TIME_BEFORE_SUNRISE):
+    wakeup_time = datetime.strptime(prayer_times["Sunrise"], TIME_FORMAT) - datetime.strptime(
         WAKEUP_TIME_BEFORE_SUNRISE,
         TIME_FORMAT)
-    wakeup_time = str(wakeup_time)[:-3]
-    prayer_times_list[0] = wakeup_time
-    return prayer_times_list
+    prayer_times["WakeUp"] = prayer_times.pop("Sunrise")
+    prayer_times["WakeUp"] = str(wakeup_time)
+    return prayer_times
+
+
+def get_prayer_time_diff(prayer_times, current_time):
+    prayer_diffs = {}
+    for prayer, time in prayer_times.items():
+        prayer_time = datetime.strptime(time, TIME_FORMAT)
+        current_time_dt = datetime.strptime(current_time, TIME_FORMAT)
+        diff = prayer_time - current_time_dt
+        prayer_diffs[prayer] = diff
+    return prayer_diffs
+
+
+def get_next_prayer_diff_in_sec(prayer_times):
+    current_time = get_current_time()
+    prayer_times_diff = get_prayer_time_diff(prayer_times, current_time)
+    for prayer_name, time_delta in prayer_times_diff.items():
+        prayer_times_diff[prayer_name] = time_delta.seconds
+    smallest_time_diff_key = min(prayer_times_diff, key=lambda k: prayer_times_diff[k])
+    return smallest_time_diff_key, prayer_times_diff[smallest_time_diff_key]
 
 
 class PrayerTimeHandler:
@@ -44,41 +69,34 @@ class PrayerTimeHandler:
     def today_prayer_times(self, current_date):
         month = current_date.month
         day = current_date.day
-        today_times = []
+        today_times = {}
         for prayer in PRAYER_NAMES:
             time = self.annual_prayer_data["data"][str(month)][day]["timings"][prayer]
             time = time.split()[0]
-            today_times.append(time)
+            today_times[prayer] = formatted_time = datetime.strptime(time, "%H:%M").strftime(TIME_FORMAT)
         return today_times
 
 
-def get_current_time():
-    current_time = datetime.now().strftime(TIME_FORMAT)
-    return current_time
 
 
-def get_prayer_times(city_name):
-    url = f"https://dailyprayer.abdulrcs.repl.co/api/{city_name}"
-    response = requests.get(url)
-    data = response.json()
-    # print(data['city'])
-    # print(data['date'])
-    prayer_time_list = []
-    for prayer in data["today"]:
-        prayer_time_list.append(data["today"][prayer])
-        # print(prayer + ": " + data["today"][prayer])
-    prayer_time_list = prayer_time_list[1:]  # removing Fajar start time
-    return prayer_time_list
-    # If you want to request for tomorrow prayer's time:
-    # for prayer in data["tomorrow"]:
-    #  print(prayer + ": " + data["tomorrow"][prayer])
 
 
-def get_prayer_time_diff(prayer_times_list, current_time):
-    prayer_diff_list = []
-    for time in prayer_times_list:
-        prayer_time = datetime.strptime(time, TIME_FORMAT)
-        current_time_dt = datetime.strptime(current_time, TIME_FORMAT)
-        diff = prayer_time - current_time_dt
-        prayer_diff_list.append(str(diff))
-    return prayer_diff_list
+
+# def get_prayer_times(city_name):
+#     url = f"https://dailyprayer.abdulrcs.repl.co/api/{city_name}"
+#     response = requests.get(url)
+#     data = response.json()
+#     # print(data['city'])
+#     # print(data['date'])
+#     prayer_time_list = []
+#     for prayer in data["today"]:
+#         prayer_time_list.append(data["today"][prayer])
+#         # print(prayer + ": " + data["today"][prayer])
+#     # prayer_time_list = prayer_time_list[1:]  # removing Fajar start time
+#     return prayer_time_list
+#     # If you want to request for tomorrow prayer's time:
+#     # for prayer in data["tomorrow"]:
+#     #  print(prayer + ": " + data["tomorrow"][prayer])
+
+
+
