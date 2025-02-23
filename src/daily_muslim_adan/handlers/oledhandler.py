@@ -18,3 +18,12 @@ def display_current_time_date(datetime_now):
         draw.rectangle(device.bounding_box, outline="white", fill="black")
         draw.text((10, 20), f"Time: {current_time}", fill="white")  # Display time
         draw.text((10, 40), f"Date: {current_date}", fill="white")  # Display date
+
+
+def display_next_adan_name_time(prayer_name, adan_time, remaining_time): # Format: YYYY-MM-DD
+
+    with canvas(device) as draw:
+        draw.rectangle(device.bounding_box, outline="white", fill="black")
+        draw.text((10, 10), f"Prayer: {prayer_name}", fill="white")  # Display time
+        draw.text((10, 30), f"Time: {adan_time}", fill="white")
+        draw.text((10, 50), f"Remaining: {remaining_time}", fill="white")

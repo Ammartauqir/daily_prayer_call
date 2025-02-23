@@ -43,6 +43,13 @@ def get_next_prayer_diff_in_sec(prayer_times):
     return smallest_time_diff_key, prayer_times_diff[smallest_time_diff_key]
 
 
+def convert_seconds(seconds):
+    hours = seconds // 3600
+    minutes = (seconds % 3600) // 60
+    seconds = seconds % 60
+    return f"{hours}h {minutes}m {seconds}s"
+
+
 class PrayerTimeHandler:
     def __init__(self, city, country, year):
         self.annual_prayer_data = None
@@ -76,27 +83,6 @@ class PrayerTimeHandler:
             today_times[prayer] = formatted_time = datetime.strptime(time, "%H:%M").strftime(TIME_FORMAT)
         return today_times
 
-
-
-
-
-
-
-# def get_prayer_times(city_name):
-#     url = f"https://dailyprayer.abdulrcs.repl.co/api/{city_name}"
-#     response = requests.get(url)
-#     data = response.json()
-#     # print(data['city'])
-#     # print(data['date'])
-#     prayer_time_list = []
-#     for prayer in data["today"]:
-#         prayer_time_list.append(data["today"][prayer])
-#         # print(prayer + ": " + data["today"][prayer])
-#     # prayer_time_list = prayer_time_list[1:]  # removing Fajar start time
-#     return prayer_time_list
-#     # If you want to request for tomorrow prayer's time:
-#     # for prayer in data["tomorrow"]:
-#     #  print(prayer + ": " + data["tomorrow"][prayer])
 
 
 
