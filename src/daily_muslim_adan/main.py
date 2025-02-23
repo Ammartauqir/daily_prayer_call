@@ -1,5 +1,5 @@
 from datetime import datetime
-import re
+import os
 import time
 import logging
 from handlers.prayertimehandler import (
@@ -9,13 +9,13 @@ from handlers.prayertimehandler import (
     get_prayer_time_diff,
     get_next_prayer_diff_in_sec,
 )
-from handlers.oledhandler import display_time_date
+from handlers.oledhandler import display_current_time_date
 from icecream import ic
-# from daily_muslim_adan.handlers.audiofilehandler import play_audio
+from handlers.audiofilehandler import AudioPlayer
 
 WAKEUP_TIME_BEFORE_SUNRISE = "00:30:00"
 REGEX_MATCH = "0:00:00"
-
+ADAN_AUDIO_FILE_PATH = os.path.abspath(os.path.join("src", "daily_muslim_adan", "data", "adan2.wav"))
 
 def init_logging():
     format = "%(asctime)s: %(message)s"
@@ -26,18 +26,21 @@ def init_logging():
 def main():
     city = "Ingolstadt"
     country = "Germany"
-    # play_audio("adan.mp3")
+    player = AudioPlayer()
     current_year = datetime.today().year
     prayer_time_obj = PrayerTimeHandler(city, country, current_year)
     while True:
         current_datetime = datetime.now()
-        display_time_date(current_datetime)
+        display_current_time_date(current_datetime)
         today_prayer_times = prayer_time_obj.today_prayer_times(current_datetime)
         today_adan_times = replace_sunrise_with_wakeup_time(today_prayer_times, WAKEUP_TIME_BEFORE_SUNRISE)
         next_adan_name, next_adan_time_in_sec = get_next_prayer_diff_in_sec(today_adan_times)
         ic(next_adan_name)
         ic(next_adan_time_in_sec)
         ic(today_adan_times[next_adan_name])
+
+        if next_adan_time_in_sec < 1650:
+            player.play_audio(ADAN_AUDIO_FILE_PATH)
         # next_adan_remaining_time = str(next_adan_time_diff).split(".")[0]  # Remove microseconds
         # print(f"\rTime left: {next_adan_remaining_time}", end="", flush=True)
 
