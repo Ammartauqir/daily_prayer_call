@@ -10,22 +10,11 @@ device = sh1106(serial)
 
 
 def display_time_date(datetime_now):
-    while True:
-        # Get the current time and date
-        current_time = datetime_now.strftime("%H:%M:%S")  # Format: HH:MM:SS
-        current_date = datetime_now.strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
+    current_time = datetime_now.strftime("%H:%M:%S")  # Format: HH:MM:SS
+    current_date = datetime_now.strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
 
-        # Display on the OLED
-        with canvas(device) as draw:
-            draw.rectangle(device.bounding_box, outline="white", fill="black")
-            draw.text((10, 20), f"Time: {current_time}", fill="white")  # Display time
-            draw.text((10, 40), f"Date: {current_date}", fill="white")  # Display date
-
-        # Wait for 1 second before updating
-        time.sleep(1)
-
-# Run the display function
-try:
-    display_time_date()
-except KeyboardInterrupt:
-    print("Display stopped.")
+    # Display on the OLED
+    with canvas(device) as draw:
+        draw.rectangle(device.bounding_box, outline="white", fill="black")
+        draw.text((10, 20), f"Time: {current_time}", fill="white")  # Display time
+        draw.text((10, 40), f"Date: {current_date}", fill="white")  # Display date
