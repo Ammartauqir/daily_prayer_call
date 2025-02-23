@@ -9,11 +9,11 @@ serial = i2c(port=1, address=0x3C)
 device = sh1106(serial)
 
 
-def display_time_date(now):
+def display_time_date(datetime_now):
     while True:
         # Get the current time and date
-        current_time = now.strftime("%H:%M:%S")  # Format: HH:MM:SS
-        current_date = now.strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
+        current_time = datetime_now.strftime("%H:%M:%S")  # Format: HH:MM:SS
+        current_date = datetime_now.strftime("%Y-%m-%d")  # Format: YYYY-MM-DD
 
         # Display on the OLED
         with canvas(device) as draw:
