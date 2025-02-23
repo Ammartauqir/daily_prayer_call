@@ -24,6 +24,6 @@ def display_next_adan_name_time(prayer_name, adan_time, remaining_time): # Forma
 
     with canvas(device) as draw:
         draw.rectangle(device.bounding_box, outline="white", fill="black")
-        draw.text((10, 10), f"Prayer: {prayer_name}", fill="white")  # Display time
-        draw.text((10, 30), f"Time: {adan_time}", fill="white")
-        draw.text((10, 50), f"Remaining: {remaining_time}", fill="white")
+        draw.text((5, 10), f"Next Prayer: {prayer_name}", fill="white")  # Display time
+        draw.text((5, 25), f"Prayer Time: {adan_time}", fill="white")
+        draw.text((5, 40), f"Remaining: {remaining_time}", fill="white")
