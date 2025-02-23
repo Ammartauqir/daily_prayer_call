@@ -6,7 +6,7 @@ from os.path import exists
 from icecream import ic
 
 PRAYER_NAMES = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha']  # skipping 'Fajr' as adan only rings 30min before sunrise
-PRAYER_FILE_PATH = os.path.abspath(os.path.join("data", "prayertime_files"))
+PRAYER_FILE_PATH = os.path.abspath(os.path.join("src", "daily_muslim_adan", "data", "prayertime_files"))
 TIME_FORMAT = "%H:%M:%S"
 
 
