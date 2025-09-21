@@ -36,11 +36,19 @@ def main():
         ic(next_adan_name)
         ic(next_adan_time_in_sec)
         ic(today_adan_times[next_adan_name])
-        display_next_adan_name_time(
-            next_adan_name,
-            today_adan_times[next_adan_name],
-            convert_seconds(next_adan_time_in_sec)
-        )
+        
+        # Try to display on OLED, but don't crash if it fails
+        try:
+            display_success = display_next_adan_name_time(
+                next_adan_name,
+                today_adan_times[next_adan_name],
+                convert_seconds(next_adan_time_in_sec)
+            )
+            if not display_success:
+                logging.warning("OLED display operation failed, continuing without display")
+        except Exception as e:
+            logging.error(f"Unexpected error during display operation: {e}")
+        
         if next_adan_time_in_sec < 2:
             player.play_audio(ADAN_AUDIO_FILE_PATH)
         time.sleep(1)
