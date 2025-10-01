@@ -77,8 +77,16 @@ class PrayerTimeHandler:
         month = current_date.month
         day = current_date.day
         today_times = {}
+        # The API returns a dict of months ("1".."12"), each mapping to a 0-based list of day entries
+        month_key = str(month)
+        if month_key not in self.annual_prayer_data["data"]:
+            raise KeyError(f"Month {month_key} not found in prayer data")
+        month_days = self.annual_prayer_data["data"][month_key]
+        day_index = day - 1  # convert 1-based calendar day to 0-based index
+        if not (0 <= day_index < len(month_days)):
+            raise IndexError(f"Day index {day_index} out of range for month {month_key}")
         for prayer in PRAYER_NAMES:
-            time = self.annual_prayer_data["data"][str(month)][day]["timings"][prayer]
+            time = month_days[day_index]["timings"][prayer]
             time = time.split()[0]
             today_times[prayer] = formatted_time = datetime.strptime(time, "%H:%M").strftime(TIME_FORMAT)
         return today_times
